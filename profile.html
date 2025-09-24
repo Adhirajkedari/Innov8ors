@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Health & Fitness Profile</title>
+    <link rel="stylesheet" href="profile-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Body and Font Styles */
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header */
+.main-header {
+    background-color: #ffffff;
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #27ae60; /* Brand Green */
+}
+.btnbtneditprofile {
+    background-color: #27ae60;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.main-nav li {
+    margin-left: 30px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.main-nav a:hover, .main-nav a.active {
+    color: #27ae60; /* Brand Green */
+}
+
+.main-nav a.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 2px;
+    background-color: #27ae60;
+}
+
+/* Profile Page Layout */
+.profile-page-container {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.sidebar {
+    flex: 0 0 280px; /* Fixed width sidebar */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 25px;
+    align-self: flex-start; /* Stick to the top */
+}
+
+.user-info-card {
+    text-align: center;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #27ae60;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.user-info-card h3 {
+    margin: 10px 0 5px;
+    color: #2c3e50;
+    font-size: 1.4em;
+}
+
+.user-info-card p {
+    color: #777;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.progress-bar-container {
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    height: 10px;
+    margin: 15px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #27ae60;
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-bar-container span {
+    font-size: 0.8em;
+    color: #666;
+    display: block;
+    margin-top: 5px;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+/* something new */
+.features-grid, .steps-container, .testimonial-grid, .pricing-grid {
+    display: grid;
+    gap: 30px;
+}
+
+.features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.feature-card {
+    background: var(--background-light);
+    padding: 35px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--box-shadow-light);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-bottom: 4px solid transparent; /* For hover effect */
+}
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-color);
+}
+.feature-card i {
+    font-size: 3.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--background-dark);
+}
+.feature-card p {
+    font-size: 0.95rem;
+    color: #666;
+}
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">SynapseFit</div>
+            <nav class="main-nav">
+                <!-- <ul>
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">AI Workout</a></li>
+                    <li><a href="#" class="active">Profile</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul> -->
+            </nav>
+        </div>
+    </header>
+
+    <div class="profile-page-container container">
+        
+        <aside class="sidebar">
+            <div class="user-info-card">
+                <img src="Gym workout.jpg" alt="User Avatar" class="sidebar-avatar">
+                <h3>Jane Doe</h3>
+                <p>Premium Member</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 75%;"></div>
+                    <span>Level 7 - 75% to next</span>
+                </div>
+                <button class="btnbtneditprofile"><i class="fas fa-user-edit"></i> Edit Profile</button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                    <li><a href="#"><i class="fas fa-dumbbell"></i> Workout Log</a></li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> Progress</a></li>
+                    <li><a href="#"><i class="fas fa-clipboard-list"></i> Goals</a></li>
+                    <li><a href="#"><i class="fas fa-utensils"></i> Nutrition</a></li>
+                    <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+                    <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="profile-content">
+            <section class="profile-overview card">
+                <h2>Welcome Back, Jane!</h2>
+                <p>Here's a snapshot of your health and fitness journey.</p>
+                
+                <div class="overview-grid">
+                    <div class="feature-card">
+                    <i class="fas fa-burn icon-large"></i>
+                        <h3>Calories Burned</h3>
+                        <p>Dynamic workout plans crafted by AI, adapting to your progress, goals, and recovery in real-time.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-heartbeat icon-large"></i>
+                        <h3>Current Streak</h3>
+                        <p><strong>25 days</strong> active</p>
+                     </div>
+                     <div class="feature-card">
+                        <i class="fas fa-clock icon-large"></i>
+                        <h3>Next Workout</h3>
+                        <p><strong>Leg Day</strong> - Tuesday 9 AM</p>
+                     </div>
+                    <!-- <div class="overview-item">
+                        <i class="fas fa-heartbeat icon-large"></i>
+                        <h3>Current Streak</h3>
+                        <p><strong>25 days</strong> active</p>
+                    </div>
+                    <div class="overview-item">
+                        <i class="fas fa-clock icon-large"></i>
+                        <h3>Next Workout</h3>
+                        <p><strong>Leg Day</strong> - Tuesday 9 AM</p>
+                    </div> -->
+                </div>
+            </section>
+
+            <section class="ai-plan-summary card">
+                <h2>Your AI Workout Plan <i class="fas fa-robot"></i></h2>
+                <div class="ai-plan-details">
+                    <p><strong>Current Plan:</strong> "Strength Builder - Intermediate"</p>
+                    <p><strong>Focus:</strong> Muscle Growth & Endurance</p>
+                    <p><strong>Generated On:</strong> October 26, 2023</p>
+                    <p>Your plan adapts based on your performance and feedback. Keep up the great work!</p>
+                    <button class="btn btn-primary"><i class="fas fa-search"></i> View Full Plan</button>
+                    <button class="btn btn-secondary"><i class="fas fa-redo-alt"></i> Generate New Plan</button>
+                </div>
+            </section>
+
+            <div class="two-column-layout">
+                <section class="health-metrics card">
+                    <h2>Your Health Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-item">
+                            <i class="fas fa-weight icon-small"></i>
+                            <h4>Weight</h4>
+                            <p><strong>70.5</strong> kg <span class="change positive">(+0.2)</span></p>
+                        </div>
+                        <div class="metric-item">
+                            <i class="fas fa-ruler-vertical icon-small"></i>
+                            <h4>Height</h4>
+                            <p><strong>170</strong> cm</p>
+                        </div>
+                        <div class="metric-item">
+                            <i class="fas fa-calculator icon-small"></i>
+                            <h4>BMI</h4>
+                            <p><strong>24.3</strong> (Normal)</p>
+                        </div>
+                        <div class="metric-item">
+                            <i class="fas fa-moon icon-small"></i>
+                            <h4>Sleep</h4>
+                            <p><strong>7.2</strong> hrs last night</p>
+                        </div>
+                        <div class="metric-item">
+                            <i class="fas fa-tint icon-small"></i>
+                            <h4>Hydration</h4>
+                            <p><strong>2.5</strong> L today</p>
+                        </div>
+                        <div class="metric-item">
+                            <i class="fas fa-walking icon-small"></i>
+                            <h4>Steps</h4>
+                            <p><strong>8,500</strong> steps</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="recent-activity card">
+                    <h2>Recent Activity</h2>
+                    <ul>
+                        <li><i class="fas fa-running activity-icon"></i> Completed "Morning Cardio" workout <span class="activity-date">Oct 29</span></li>
+                        <li><i class="fas fa-utensils activity-icon"></i> Logged breakfast: Oats & Berries <span class="activity-date">Oct 29</span></li>
+                        <li><i class="fas fa-dumbbell activity-icon"></i> Completed "Upper Body Strength" workout <span class="activity-date">Oct 28</span></li>
+                        <li><i class="fas fa-balance-scale activity-icon"></i> Updated weight: 70.5 kg <span class="activity-date">Oct 27</span></li>
+                        <li><i class="fas fa-robot activity-icon"></i> AI plan updated: New leg day routine <span class="activity-date">Oct 27</span></li>
+                    </ul>
+                    <button class="btn btn-link">View All Activity</button>
+                </section>
+            </div>
+
+            <section class="progress-charts card">
+                <h2>Your Progress <i class="fas fa-chart-area"></i></h2>
+                <div class="chart-area-placeholder">
+                    <p>Progress charts will appear here (e.g., Weight Trend, Workout Volume, Calorie Burn).</p>
+                    <img src="https://via.placeholder.com/600x250/f0f0f0/666666?text=Chart+Placeholder" alt="Progress Chart Placeholder">
+                </div>
+                <button class="btn btn-primary">Analyze Progress</button>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2023 Health & Care. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

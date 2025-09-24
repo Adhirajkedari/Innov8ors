@@ -1,0 +1,78 @@
+body {
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    /* Softer, modern background color */
+    background-color: #f0f4f8; 
+    /* Subtle gradient for depth */
+    background-image: linear-gradient(to top right, #e1e9f0, #f0f4f8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    /* Changed to a clean white for a modern feel */
+    background: #ffffff;
+    padding: 2.5em; /* Increased padding for more whitespace */
+    border-radius: 12px; /* Softer, more rounded corners */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Deeper, softer shadow */
+    width: 320px; /* Slightly wider */
+    text-align: center; /* Center align all content */
+}
+
+.login-form h2 {
+    margin-bottom: 1.5em;
+    /* Darker, more professional text color */
+    color: #2c3e50; 
+    font-size: 1.8em; /* Larger title */
+}
+
+.input-group {
+    margin-bottom: 1.5em;
+    text-align: left; /* Align labels and inputs to the left */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    /* Slightly lighter text color for labels */
+    color: #7f8c8d; 
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.8em;
+    border: 1px solid #bdc3c7; /* Subtle border color */
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for focus */
+}
+
+/* Style for when the user clicks on an input field */
+.input-group input:focus {
+    outline: none; /* Remove default browser outline */
+    border-color: #3498db; /* Highlight with the primary blue */
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Add a soft glow */
+}
+
+button {
+    width: 100%;
+    padding: 0.8em;
+    /* A vibrant, modern blue for the main action button */
+    background-color: #3498db; 
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    /* A slightly darker blue for the hover effect */
+    background-color: #2980b9; 
+    transform: translateY(-2px); /* Add a subtle lift effect on hover */
+}

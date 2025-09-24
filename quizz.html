@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fitness Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #170c0c;
+            color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .quiz-container {
+            width: 100%;
+            max-width: 2xl;
+            background-color: #1a1a1a;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input[type="radio"] + label {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #374151;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        input[type="radio"]:checked + label {
+            background-color: #2d3748;
+            border-color: #6366f1;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="w-full">
+        <div id="quiz-screen" class="quiz-container hidden">
+            <h2 id="question-text" class="text-2xl md:text-3xl font-extrabold text-center mb-6"></h2>
+            
+            <div id="answers-container" class="space-y-4">
+                <!-- Answer choices will be injected here -->
+            </div>
+
+            <div class="mt-8 flex justify-between items-center">
+                <p id="question-counter" class="text-sm text-gray-400"></p>
+                <div class="flex space-x-4">
+                    <button id="back-btn" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-full transition-colors icon-btn hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Back
+                    </button>
+                    <button id="next-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-full transition-colors icon-btn">
+                        Next
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="welcome-screen" class="quiz-container fade-in">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-4">Welcome to the Fitness Quiz!</h2>
+            <p class="text-gray-300 text-center text-lg leading-relaxed mb-8">
+                Test your knowledge of exercises, muscle groups, and proper form with 20 questions.
+            </p>
+            <div class="text-center">
+                <button id="start-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-full transition-colors icon-btn">
+                    Get Started
+                </button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="quiz-container hidden">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-4">Quiz Complete!</h2>
+            <p id="score-text" class="text-gray-300 text-center text-xl leading-relaxed mb-8"></p>
+            <div class="text-center space-y-4">
+                <a href="index.html" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-full transition-colors inline-flex items-center justify-center">
+                    Go to Dashboard
+                </a>
+                <button id="retake-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full transition-colors icon-btn">
+                    Retake Quiz
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const quizData = [
+            {
+                question: "Which exercise primarily targets the quadriceps?",
+                answers: ["Bench Press", "Bicep Curls", "Leg Press", "Lat Pulldown"],
+                correct: 2
+            },
+            {
+                question: "What is the primary muscle group worked during a 'plank'?",
+                answers: ["Biceps", "Core", "Hamstrings", "Calves"],
+                correct: 1
+            },
+            {
+                question: "The 'Lat Pulldown' exercise targets which muscle group?",
+                answers: ["Chest", "Shoulders", "Back", "Glutes"],
+                correct: 2
+            },
+            {
+                question: "Which of these is a compound exercise?",
+                answers: ["Leg Extension", "Bicep Curl", "Squat", "Lateral Raise"],
+                correct: 2
+            },
+            {
+                question: "When performing a deadlift, what is the most important cue for protecting your lower back?",
+                answers: ["Keep your back straight", "Bend your knees deeply", "Look up at the ceiling", "Use a light weight"],
+                correct: 0
+            },
+            {
+                question: "What is the benefit of a warm-up before a workout?",
+                answers: ["It builds muscle", "It increases your heart rate and blood flow", "It helps you lift heavier weights", "It decreases flexibility"],
+                correct: 1
+            },
+            {
+                question: "Which muscle group is worked in a 'Tricep Extension'?",
+                answers: ["Triceps", "Biceps", "Forearms", "Chest"],
+                correct: 0
+            },
+            {
+                question: "What does 'RPE' stand for in a workout context?",
+                answers: ["Reps Per Exercise", "Rate of Perceived Exertion", "Resistance and Power Estimation", "Repetitions Per Endurance"],
+                correct: 1
+            },
+            {
+                question: "What is the main purpose of protein for muscle growth?",
+                answers: ["Provides immediate energy", "Repairs muscle fibers after a workout", "Increases endurance", "Lubricates joints"],
+                correct: 1
+            },
+            {
+                question: "What is the key difference between a 'push' workout and a 'pull' workout?",
+                answers: ["Push is for legs, pull is for arms", "Push exercises involve pressing weight away, pull exercises involve bringing weight towards you", "Push is for beginners, pull is for advanced", "There is no difference"],
+                correct: 1
+            },
+            {
+                question: "The 'gluteus maximus' is the main muscle in which body part?",
+                answers: ["Shoulders", "Abdominals", "Buttocks", "Calves"],
+                correct: 2
+            },
+            {
+                question: "Which of these is a correct form for a 'Bicep Curl'?",
+                answers: ["Swinging the weights to gain momentum", "Keeping your elbows pinned to your sides", "Arching your back for support", "Lifting the weights with your wrists"],
+                correct: 1
+            },
+            {
+                question: "What is a 'drop set'?",
+                answers: ["Dropping your weights on the floor", "Performing an exercise to failure, then immediately dropping the weight and continuing with a lighter weight", "A set with no rest", "A set with only bodyweight exercises"],
+                correct: 1
+            },
+            {
+                question: "The 'chest' muscle is also known as the...",
+                answers: ["Deltoids", "Pectoralis major", "Latissimus dorsi", "Trapezius"],
+                correct: 1
+            },
+            {
+                question: "What is the primary benefit of proper hydration during a workout?",
+                answers: ["It increases muscle mass", "It prevents cramps and regulates body temperature", "It helps you lose weight faster", "It improves your balance"],
+                correct: 1
+            },
+            {
+                question: "Which exercise is best for targeting the 'side abs' (obliques)?",
+                answers: ["Crunches", "Leg Raises", "Russian Twists", "Supermans"],
+                correct: 2
+            },
+            {
+                question: "What is the role of a 'spotter' during a heavy bench press?",
+                answers: ["To motivate you", "To count your reps", "To help you lift the bar if you can't complete a repetition", "To tell you what weight to use"],
+                correct: 2
+            },
+            {
+                question: "Which food group is a primary source of carbohydrates for energy?",
+                answers: ["Fats and oils", "Fruits and grains", "Dairy and protein", "Veggies and meat"],
+                correct: 1
+            },
+            {
+                question: "What is the optimal rest time between sets for muscle hypertrophy (growth)?",
+                answers: ["10-20 seconds", "30-90 seconds", "3-5 minutes", "No rest"],
+                correct: 1
+            },
+            {
+                question: "Which of these is an isolation exercise?",
+                answers: ["Overhead Press", "Squat", "Bicep Curl", "Deadlift"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const startBtn = document.getElementById('start-btn');
+        const quizScreen = document.getElementById('quiz-screen');
+        const questionText = document.getElementById('question-text');
+        const answersContainer = document.getElementById('answers-container');
+        const questionCounter = document.getElementById('question-counter');
+        const backBtn = document.getElementById('back-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const resultsScreen = document.getElementById('results-screen');
+        const scoreText = document.getElementById('score-text');
+        const retakeBtn = document.getElementById('retake-btn');
+
+        startBtn.addEventListener('click', startQuiz);
+        nextBtn.addEventListener('click', handleNextClick);
+        backBtn.addEventListener('click', handleBackClick);
+        retakeBtn.addEventListener('click', resetQuiz);
+
+        function startQuiz() {
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            quizScreen.classList.add('fade-in');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const currentQ = quizData[currentQuestionIndex];
+            questionText.textContent = currentQ.question;
+            answersContainer.innerHTML = '';
+            questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+            
+            backBtn.classList.toggle('hidden', currentQuestionIndex === 0);
+            nextBtn.textContent = (currentQuestionIndex === quizData.length - 1) ? 'Submit' : 'Next';
+
+            currentQ.answers.forEach((answer, index) => {
+                const answerDiv = document.createElement('div');
+                const radioId = `q${currentQuestionIndex}-ans${index}`;
+                answerDiv.innerHTML = `
+                    <input type="radio" id="${radioId}" name="answer" value="${index}" ${userAnswers[currentQuestionIndex] === index ? 'checked' : ''} />
+                    <label for="${radioId}" class="block text-white font-medium hover:bg-gray-800">
+                        ${answer}
+                    </label>
+                `;
+                answersContainer.appendChild(answerDiv);
+            });
+        }
+
+        function handleNextClick() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (!selectedAnswer) {
+                alert('Please select an answer to continue.');
+                return;
+            }
+
+            userAnswers[currentQuestionIndex] = parseInt(selectedAnswer.value);
+            
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function handleBackClick() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            resultsScreen.classList.add('fade-in');
+
+            score = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer === quizData[index].correct) {
+                    score++;
+                }
+            });
+
+            scoreText.textContent = `You scored ${score} out of ${quizData.length}!`;
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            resultsScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+            welcomeScreen.classList.add('fade-in');
+        }
+    </script>
+</body>
+</html>

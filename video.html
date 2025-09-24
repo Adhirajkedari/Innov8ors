@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Innov8ors Learning Hub</title>
+  <style>
+    /* Reset & base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #f5f5f5;
+    }
+
+    /* Header & Nav */
+.header {
+    background: var(--background-light);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--box-shadow-light);
+}
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+.nav a {
+    color: var(--text-color-dark);
+    text-decoration: none;
+    margin-left: 30px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 3px; /* For underline effect */
+}
+.nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--secondary-color);
+    transition: width 0.3s ease-out;
+}
+.nav a:hover::after,
+.nav a.active::after {
+    width: 100%;
+}
+
+.hamburger-menu {
+    display: none; /* Hidden on desktop */
+    font-size: 1.8rem;
+    color: var(--text-color-dark);
+    cursor: pointer;
+}
+
+    /* Search bar */
+    .search-bar {
+      margin: 1rem auto;
+      max-width: 600px;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .search-bar button {
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .search-bar button:hover {
+      background-color: #3730a3;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .category {
+      margin-bottom: 3rem;
+    }
+    .category h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      border-left: 5px solid #4f46e5;
+      padding-left: 0.5rem;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .video-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .video-card:hover {
+      transform: translateY(-5px);
+    }
+    .video-card video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .video-card .content {
+      padding: 1rem;
+    }
+    .video-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .video-card p {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    .video-card button {
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .video-card button:hover {
+      background-color: #3730a3;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      background-color: #e0e7ff;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #4f46e5;
+      text-decoration: none;
+      margin: 0 0.5rem;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Dark mode footer */
+    body.dark-mode footer {
+      background-color: #1f1f1f;
+      color: #f5f5f5;
+    }
+
+    /* Dark mode cards */
+    body.dark-mode .video-card {
+      background-color: #1f1f1f;
+      box-shadow: 0 4px 15px rgba(255,255,255,0.05);
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      nav {
+        gap: 1rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header class="header">
+        <div class="container">
+            <a href="#" class="logo">SynapseFit</a>
+            <nav class="nav">
+                <a href="#features" class="active">Features</a>
+                <a href="#how-it-works" class="">How It Works</a>
+                <a href="#testimonials">Testimonials</a>
+                <!-- <a href="#pricing">Pricing</a> -->
+                <!-- <button class="cta-button nav-cta">Get Started</button> -->
+            </nav>
+            <div class="hamburger-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input type="text" placeholder="Search videos..." id="videoSearch">
+    <button>Search</button>
+  </div>
+
+  <main>
+    <!-- Beginner Category -->
+    <section class="category">
+      <h2>Beginner Tutorials</h2>
+      <div class="video-grid">
+        <div class="video-card">
+          <video class="workout" controls>
+            <source src="vid1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="content">
+            <h3>Back Workout</h3>
+            <p>Develops lats, traps, and spinal support muscles. Boosts posture, pulling strength, and overall upper body width.</p>
+            <button>AI Coaching</button>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video class="workout" controls>
+            <source src="vid2.mp4" type="video/mp4">
+          </video>
+          <div class="content">
+            <h3>Bicep Workout</h3>
+            <p>Isolates the front arm muscles for size and definition. Curl variations enhance arm strength and aesthetics.</p>
+            <button>AI Coaching</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Advanced Category -->
+    <section class="category">
+      <h2>Advanced Tutorials</h2>
+      <div class="video-grid">
+        <div class="video-card">
+          <video class="workout" controls>
+            <source src="vid3.mp4" type="video/mp4">
+          </video>
+          <div class="content">
+            <h3>Chest Workout</h3>
+            <p>Builds upper body strength and shapes the pectoral muscles. Push and press movements target chest, shoulders, and triceps.</p>
+            <button>AI Coaching</button>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video class="workout" controls>
+            <source src="vid4.mp4" type="video/mp4">
+          </video>
+          <div class="content">
+            <h3>Leg Workout</h3>
+            <p>Strengthens quads, hamstrings, calves, and glutes. Improves balance, stability, and overall power.</p>
+            <button>AI Coaching</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Innov8ors. All rights reserved.
+    <br>
+    <a href="#">Privacy Policy</a> | 
+    <a href="#">Terms of Service</a> | 
+    <a href="#">Contact Us</a>
+  </footer>
+
+  <!-- Dark Mode Script -->
+  <script>
+    // on mourseover play video, on mouseout pause and reset
+    const videos = document.querySelectorAll(".workout");
+
+    videos.forEach(video => {
+      video.addEventListener("mouseenter", () => {
+        video.play();
+      });
+
+      video.addEventListener("mouseleave", () => {
+        video.pause();
+        video.currentTime = 0; // reset to start
+      });
+    });
+
+
+    const toggle = document.getElementById('darkModeToggle');
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      toggle.textContent = document.body.classList.contains('dark-mode') ? '☀' : '🌙';
+    });
+  </script>
+
+</body>
+</html>

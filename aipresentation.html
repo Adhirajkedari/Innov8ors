@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fitness Coach</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-spin-fast {
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Main Container -->
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full p-8 transition-all duration-300">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 leading-tight mb-2">Your <span class="text-green-500">AI</span> Fitness Coach</h1>
+            <p class="text-gray-500 text-lg sm:text-xl">Get a personalized workout and meal plan tailored to your goals.</p>
+        </div>
+
+        <!-- Input Section -->
+        <div id="input-section">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
+                <div class="w-full">
+                    <label for="goal" class="block text-sm font-medium text-gray-700 mb-1">Your Goal</label>
+                    <select id="goal" class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-gray-700 appearance-none">
+                        <option value="default" disabled selected class="text-gray-400">Choose a goal...</option>
+                        <option value="weight_loss">Weight Loss</option>
+                        <option value="muscle_gain">Muscle Gain</option>
+                        <option value="flexibility">Flexibility & Core Strength</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                    <input type="number" id="age" placeholder="e.g., 30" class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+                </div>
+                <div>
+                    <label for="height" class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+                    <input type="number" id="height" placeholder="e.g., 175" class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+                </div>
+                <div>
+                    <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+                    <input type="number" id="weight" placeholder="e.g., 70" class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-green-500 focus:border-green-500 transition-all duration-200">
+                </div>
+                <div>
+                    <label for="activity" class="block text-sm font-medium text-gray-700 mb-1">Activity Level</label>
+                    <select id="activity" class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-gray-700 appearance-none">
+                        <option value="sedentary">Sedentary</option>
+                        <option value="light">Lightly Active</option>
+                        <option value="moderate">Moderately Active</option>
+                        <option value="high">Very Active</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="generate-btn" class="w-full px-6 py-3 sm:py-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95">
+                Generate My Personalized Plan <i class="fas fa-play ml-2"></i>
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="hidden text-center py-12">
+            <i class="fas fa-dumbbell fa-4x text-green-500 animate-spin-fast mb-4"></i>
+            <p class="text-xl text-gray-700 font-semibold">Generating your custom plan...</p>
+            <p class="text-sm text-gray-500 mt-2">This may take a moment as our AI processes your data.</p>
+        </div>
+
+        <!-- Plan Display Section -->
+        <div id="plan-output" class="hidden animate-fadeIn">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Your Personalized Weekly Plan</h2>
+            
+            <!-- Plan Sections Container -->
+            <div id="plan-sections" class="flex flex-col gap-8">
+                <!-- Workout Plan -->
+                <div id="workout-plan" class="bg-gray-50 p-6 rounded-2xl shadow-inner">
+                    <h3 class="text-2xl font-semibold text-green-600 mb-4 flex items-center gap-3">
+                        <i class="fas fa-dumbbell"></i> Workout Plan
+                    </h3>
+                    <div id="workout-content" class="text-gray-700 space-y-4"></div>
+                </div>
+
+                <!-- Pre-Workout & Diet Plan -->
+                <div id="pre-workout-plan" class="bg-gray-50 p-6 rounded-2xl shadow-inner">
+                    <h3 class="text-2xl font-semibold text-green-600 mb-4 flex items-center gap-3">
+                        <i class="fas fa-seedling"></i> Pre-Workout & Nutrition
+                    </h3>
+                    <div id="pre-workout-content" class="text-gray-700 space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Box (replaces alert) -->
+        <div id="message-box" class="fixed top-4 left-1/2 -translate-x-1/2 hidden p-4 rounded-xl shadow-lg transform -translate-y-10 transition-all duration-300 ease-out z-50">
+            <p id="message-text" class="font-medium"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generate-btn').addEventListener('click', function() {
+            const goal = document.getElementById('goal').value;
+            const age = parseInt(document.getElementById('age').value);
+            const height = parseInt(document.getElementById('height').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = document.getElementById('activity').value;
+
+            // Simple input validation
+            if (goal === 'default' || !age || !height || !weight) {
+                showMessage('Please fill out all the fields.', 'bg-red-500', 'text-white');
+                return;
+            }
+
+            // Show loading state and hide previous content
+            document.getElementById('input-section').classList.add('hidden');
+            document.getElementById('plan-output').classList.add('hidden');
+            document.getElementById('loading-state').classList.remove('hidden');
+
+            // Simulate AI processing
+            setTimeout(() => {
+                const plan = getPlan(goal, age, activity);
+                document.getElementById('workout-content').innerHTML = plan.workout;
+                document.getElementById('pre-workout-content').innerHTML = plan.nutrition;
+
+                // Hide loading and show plan
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('plan-output').classList.remove('hidden');
+            }, 2000);
+        });
+
+        // Function to get a customized plan based on inputs
+        function getPlan(goal, age, activity) {
+            let workout = '';
+            let nutrition = '';
+
+            const intensity = {
+                'sedentary': 'moderate',
+                'light': 'moderate-to-high',
+                'moderate': 'high',
+                'high': 'very high'
+            };
+
+            const basePlans = {
+                weight_loss: {
+                    workout: `
+                        <p class="mb-2">Your plan is tailored for efficient calorie burning. It focuses on a mix of cardio and strength training to maximize your metabolism.</p>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Monday: Full Body HIIT & Cardio</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Warm-up (5 min)</li>
+                                <li>HIIT Circuit (4 rounds): 45s Jumping Jacks, 45s Burpees, 45s High Knees. 30s rest.</li>
+                                <li>Cardio: 20 minutes brisk walk/jog at a ${intensity[activity]} pace.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Wednesday: Lower Body Focus</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Squats (${age < 40 ? '4 sets of 15' : '3 sets of 12'})</li>
+                                <li>Lunges (3 sets of 12 per leg)</li>
+                                <li>Glute Bridges (3 sets of 20)</li>
+                                <li>Calf Raises (3 sets of 20)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Friday: Upper Body & Core Strength</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Push-ups (${age < 30 ? '3 sets to failure' : '3 sets of 10-15'})</li>
+                                <li>Dumbbell Rows (3 sets of 12)</li>
+                                <li>Overhead Press (3 sets of 10)</li>
+                                <li>Plank (3 sets of 60s)</li>
+                            </ul>
+                        </div>
+                    `,
+                    nutrition: `
+                        <p class="mb-2">Your nutrition plan focuses on a calorie deficit while providing ample nutrients. The key is to fuel your body without over-consuming.</p>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Pre-Workout:</h4>
+                            <p class="text-sm text-gray-600">A small banana or a handful of almonds 30-45 minutes before training for quick energy.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Nutrition Plan:</h4>
+                            <p class="text-sm text-gray-600">Focus on lean protein, high-fiber vegetables, and whole grains. Drink plenty of water throughout the day. Avoid sugary drinks and processed snacks to meet your goals efficiently.</p>
+                        </div>
+                    `
+                },
+                muscle_gain: {
+                    workout: `
+                        <p class="mb-2">This plan is designed for muscle hypertrophy. We'll focus on compound movements and progressive overload to stimulate muscle growth effectively.</p>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Monday: Chest & Triceps</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Bench Press (4 sets of 8)</li>
+                                <li>Incline Dumbbell Press (3 sets of 10)</li>
+                                <li>Cable Crossovers (3 sets of 12)</li>
+                                <li>Tricep Pushdowns (3 sets of 12)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Wednesday: Back & Biceps</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Deadlifts (4 sets of 6)</li>
+                                <li>Pull-ups (4 sets to failure)</li>
+                                <li>Bent-over Rows (3 sets of 8)</li>
+                                <li>Barbell Curls (3 sets of 10)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Friday: Legs & Shoulders</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Barbell Squats (4 sets of 8)</li>
+                                <li>Leg Press (3 sets of 10)</li>
+                                <li>Overhead Press (4 sets of 8)</li>
+                                <li>Lateral Raises (3 sets of 15)</li>
+                            </ul>
+                        </div>
+                    `,
+                    nutrition: `
+                        <p class="mb-2">To gain muscle, your body needs a caloric surplus with high protein intake. Your meals should be timed strategically around your workouts.</p>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Pre-Workout:</h4>
+                            <p class="text-sm text-gray-600">A balanced meal with protein and complex carbs (e.g., chicken and brown rice) 60-90 minutes before your workout.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Nutrition Plan:</h4>
+                            <p class="text-sm text-gray-600">Eat at least 1.6g of protein per kg of body weight. Incorporate healthy fats from avocados and nuts. Drink a protein shake immediately post-workout to kickstart recovery.</p>
+                        </div>
+                    `
+                },
+                flexibility: {
+                    workout: `
+                        <p class="mb-2">This plan focuses on improving your range of motion, joint stability, and core strength, which are essential for overall health.</p>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Monday: Mobility & Stretching</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Warm-up (5 min): Light cardio, then dynamic stretches.</li>
+                                <li>Cat-Cow Stretch (10 reps), Child's Pose (60s hold)</li>
+                                <li>Hamstring Stretch (30s per leg)</li>
+                                <li>Pigeon Pose (30s per leg)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Wednesday: Core & Balance</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Plank (3 sets of 60s)</li>
+                                <li>Side Plank (3 sets of 30s per side)</li>
+                                <li>Bird Dog (3 sets of 10 reps per side)</li>
+                                <li>Single-Leg Balance (30s per leg)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Friday: Full Body Flow & Recovery</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Sun Salutations (5-10 reps)</li>
+                                <li>Warrior II to Reverse Warrior flow (5 reps per side)</li>
+                                <li>Bridge Pose (3 sets of 15 reps)</li>
+                                <li>Spinal Twists (3 sets of 10 per side)</li>
+                            </ul>
+                        </div>
+                    `,
+                    nutrition: `
+                        <p class="mb-2">Your nutrition plan supports joint health and muscle recovery. Focus on foods that reduce inflammation and provide sustained energy.</p>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Pre-Workout:</h4>
+                            <p class="text-sm text-gray-600">A light, hydrating snack like a handful of berries or a piece of fruit 30 minutes before your session.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h4 class="text-lg font-bold mb-2 text-green-600">Nutrition Plan:</h4>
+                            <p class="text-sm text-gray-600">Incorporate anti-inflammatory foods like fatty fish, turmeric, and leafy greens. Hydration is key for muscle pliability. Avoid processed sugar, which can lead to inflammation.</p>
+                        </div>
+                    `
+                }
+            };
+            return basePlans[goal];
+        }
+
+        function showMessage(text, bgColor, textColor) {
+            const messageBox = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
+            
+            messageText.textContent = text;
+            messageBox.classList.remove('bg-red-500', 'bg-green-500', 'text-white'); // Clean previous classes
+            messageBox.classList.add(bgColor, textColor, 'opacity-100', 'translate-y-0');
+            messageBox.classList.remove('hidden');
+
+            // Hide after a few seconds
+            setTimeout(() => {
+                messageBox.classList.add('opacity-0', '-translate-y-10');
+                setTimeout(() => {
+                    messageBox.classList.add('hidden');
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
